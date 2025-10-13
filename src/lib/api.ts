@@ -8,32 +8,37 @@ export interface Product {
 }
 
 export interface PurchaseItem {
-  product_id: number
-  quantity: number
-  unit_price: number
-  subtotal: number
+  product_id: number      // 商品一意キー
+  product_code: string    // 商品コード
+  product_name: string    // 商品名称
+  unit_price: number      // 商品単価
 }
 
-export interface Purchase {
-  trd_id?: number
-  datetime?: string
-  emp_cd?: string
-  store_cd?: string
-  pos_no?: string
-  total_amt: number
-  details?: PurchaseItem[]
+export interface PurchaseRequest {
+  items: PurchaseItem[]
+  emp_cd?: string         // レジ担当者コード
+  store_cd?: string       // 店舗コード
+  pos_no?: string         // POS機ID
+}
+
+export interface PurchaseResponse {
+  success: boolean        // 成否
+  trd_id: number         // 取引一意キー
+  total_amt: number      // 合計金額（税込）
+  total_amt_ex_tax: number  // 合計金額（税抜）
 }
 
 export const api = {
-  async getProductByCode(productCode: string): Promise<Product> {
+  async getProductByCode(productCode: string): Promise<Product | null> {
     const response = await fetch(`${API_BASE_URL}/products/${productCode}`)
     if (!response.ok) {
-      throw new Error('Product not found')
+      throw new Error('Failed to fetch product')
     }
-    return response.json()
+    const data = await response.json()
+    return data  // NULLの場合もそのまま返す
   },
 
-  async createPurchase(purchase: { items: PurchaseItem[] }): Promise<Purchase> {
+  async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
     const response = await fetch(`${API_BASE_URL}/purchases`, {
       method: 'POST',
       headers: {
