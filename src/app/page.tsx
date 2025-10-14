@@ -60,9 +60,14 @@ export default function Home() {
 
     try {
       const product = await api.getProductByCode(productCode)
-      setCurrentProduct(product)
-      setProductCode(product.prd_code)
-      setProductNotFound(false)
+      if (product) {
+        setCurrentProduct(product)
+        setProductCode(product.code)
+        setProductNotFound(false)
+      } else {
+        setCurrentProduct(null)
+        setProductNotFound(true)
+      }
     } catch (err) {
       setCurrentProduct(null)
       setProductNotFound(true)
