@@ -24,6 +24,8 @@ jobs:
           node-version: '22.x'
 
       - name: npm install, build, and test
+        env:
+          NEXT_PUBLIC_API_URL: https://app-002-gen10-step3-1-py-oshima1.azurewebsites.net/api
         run: |
           npm install
           npm run build --if-present
