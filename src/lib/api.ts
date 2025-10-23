@@ -30,6 +30,8 @@ export interface PurchaseResponse {
 
 export const api = {
   async getProductByCode(productCode: string): Promise<Product | null> {
+    console.log('Fetching product with code:', productCode)
+    console.log('API_BASE_URL:', API_BASE_URL)
     const response = await fetch(`${API_BASE_URL}/products/${productCode}`)
     if (!response.ok) {
       throw new Error('Failed to fetch product')
@@ -39,7 +41,8 @@ export const api = {
   },
 
   async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
-    const response = await fetch(`${API_BASE_URL}/purchases`, {
+    console.log('Creating purchase with data:', purchase)
+    const response = await fetch("http://app-002-gen10-step3-1-py-oshima1.azurewebsites.net/api/purchases", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
