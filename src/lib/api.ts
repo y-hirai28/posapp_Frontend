@@ -38,17 +38,24 @@ export const api = {
 
   async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
     console.log('Creating purchase with data:', purchase)
+    const requestBody = JSON.stringify(purchase)
+    console.log('Request body JSON:', requestBody)
+
     const response = await fetch(`${API_BASE_URL}/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(purchase),
+      body: requestBody,
     })
+
+    console.log('Response status:', response.status)
+
     if (!response.ok) {
       // 200/201以外の場合はレスポンスボディを取得してエラー表示
       const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
-      const errorMessage = errorData.detail || `HTTP ${response.status}: ${response.statusText}`
+      console.log('Error response:', errorData)
+      const errorMessage = errorData.detail || JSON.stringify(errorData) || `HTTP ${response.status}: ${response.statusText}`
       throw new Error(errorMessage)
     }
     return response.json()
