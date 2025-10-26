@@ -122,8 +122,7 @@ export default function Home() {
 
       const purchaseRequest: PurchaseRequest = {
         items: purchaseItems,
-        emp_cd: '',  // レジ担当者コード（空白の場合はバックエンドで'9999999999'になる）
-        // store_cd と pos_no はバックエンドで固定値が設定される
+        // emp_cd, store_cd, pos_no は省略するとバックエンドでデフォルト値が設定される
       }
 
       // 購入APIを呼び出し
