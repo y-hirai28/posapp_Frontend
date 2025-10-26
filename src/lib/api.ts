@@ -42,7 +42,7 @@ export const api = {
 
   async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
     console.log('Creating purchase with data:', purchase)
-    const response = await fetch(`${API_BASE_URL}/purchases`, {
+    const response = await fetch(`${API_BASE_URL}/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const api = {
   },
 
   async getProducts(): Promise<Product[]> {
-    const response = await fetch(`${API_BASE_URL}/products`)
+    const response = await fetch(`${API_BASE_URL}/products/`)
     if (!response.ok) {
       throw new Error('Failed to fetch products')
     }
