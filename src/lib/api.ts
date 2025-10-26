@@ -42,7 +42,7 @@ export const api = {
 
   async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
     console.log('Creating purchase with data:', purchase)
-    const response = await fetch("http://app-002-gen10-step3-1-py-oshima1.azurewebsites.net/api/purchases", {
+    const response = await fetch(`${API_BASE_URL}/purchases`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
