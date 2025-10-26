@@ -112,17 +112,15 @@ export default function Home() {
     setError('')
 
     try {
-      // 購入APIに送信するデータを作成
+      // 購入APIに送信するデータを作成（新形式: {code, qty}）
       const purchaseItems: PurchaseItem[] = cart.map(item => ({
-        product_id: item.prd_id,      // 商品一意キー
-        product_code: item.code,       // 商品コード
-        product_name: item.name,       // 商品名称
-        unit_price: item.price         // 商品単価
+        code: item.code,                        // 商品コード
+        qty: item.quantity > 0 ? item.quantity : 1  // 数量（0以下の場合は1）
       }))
 
       const purchaseRequest: PurchaseRequest = {
         items: purchaseItems,
-        // emp_cd, store_cd, pos_no は省略するとバックエンドでデフォルト値が設定される
+        // emp_cd は省略するとバックエンドでデフォルト値'9999999999'が設定される
       }
 
       // 購入APIを呼び出し
@@ -136,7 +134,10 @@ export default function Home() {
         setError('購入処理に失敗しました')
       }
     } catch (err) {
-      setError('購入処理に失敗しました')
+      // エラーメッセージを表示
+      const errorMessage = err instanceof Error ? err.message : '購入処理に失敗しました'
+      setError(errorMessage)
+      console.error('Purchase error:', err)
     } finally {
       setLoading(false)
     }

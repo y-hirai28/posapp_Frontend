@@ -8,17 +8,13 @@ export interface Product {
 }
 
 export interface PurchaseItem {
-  product_id: number      // 商品一意キー
-  product_code: string    // 商品コード
-  product_name: string    // 商品名称
-  unit_price: number      // 商品単価
+  code: string            // 商品コード
+  qty: number             // 数量
 }
 
 export interface PurchaseRequest {
   items: PurchaseItem[]
-  emp_cd?: string         // レジ担当者コード
-  store_cd?: string       // 店舗コード
-  pos_no?: string         // POS機ID
+  emp_cd?: string         // レジ担当者コード（省略可）
 }
 
 export interface PurchaseResponse {
@@ -50,7 +46,10 @@ export const api = {
       body: JSON.stringify(purchase),
     })
     if (!response.ok) {
-      throw new Error('Failed to create purchase')
+      // 200/201以外の場合はレスポンスボディを取得してエラー表示
+      const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
+      const errorMessage = errorData.detail || `HTTP ${response.status}: ${response.statusText}`
+      throw new Error(errorMessage)
     }
     return response.json()
   },
