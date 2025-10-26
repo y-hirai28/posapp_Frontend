@@ -114,14 +114,18 @@ export default function Home() {
     try {
       // 購入APIに送信するデータを作成（新形式: {code, qty}）
       const purchaseItems: PurchaseItem[] = cart.map(item => ({
-        code: item.code,                        // 商品コード
-        qty: item.quantity > 0 ? item.quantity : 1  // 数量（0以下の場合は1）
+        code: String(item.code),                        // 商品コード（文字列として明示）
+        qty: Number(item.quantity > 0 ? item.quantity : 1)  // 数量（数値として明示、0以下の場合は1）
       }))
+
+      console.log('Purchase items before API call:', purchaseItems)
 
       const purchaseRequest: PurchaseRequest = {
         items: purchaseItems,
         // emp_cd は省略するとバックエンドでデフォルト値'9999999999'が設定される
       }
+
+      console.log('Purchase request:', purchaseRequest)
 
       // 購入APIを呼び出し
       const response = await api.createPurchase(purchaseRequest)

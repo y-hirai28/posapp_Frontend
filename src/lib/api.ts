@@ -38,8 +38,13 @@ export const api = {
 
   async createPurchase(purchase: PurchaseRequest): Promise<PurchaseResponse> {
     console.log('Creating purchase with data:', purchase)
+    console.log('Type checks:')
+    purchase.items.forEach((item, idx) => {
+      console.log(`  Item ${idx}: code type=${typeof item.code}, code value="${item.code}", qty type=${typeof item.qty}, qty value=${item.qty}`)
+    })
     const requestBody = JSON.stringify(purchase)
     console.log('Request body JSON:', requestBody)
+    console.log('Parsed back:', JSON.parse(requestBody))
 
     const response = await fetch(`${API_BASE_URL}/purchases/`, {
       method: 'POST',
